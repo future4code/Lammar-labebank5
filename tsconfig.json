@@ -4,8 +4,13 @@
     "module": "commonjs",
     "outDir": "./build",
     "rootDir": "./src",
+    "sourceMap": true,
+    "removeComments": true,
+    "noEmitOnError": true,
     "strict": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true
   }
 }
