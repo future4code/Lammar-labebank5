@@ -96,16 +96,14 @@ app.post("/novocliente", (req: Request, res: Response) => {
 app.put("/clientes/saldo", (req: Request, res: Response) => {
   let errorCode: number = 400;
 
-  const { nome, cpf } = req.headers;
-  const { addSaldo } = req.body;
-
   try {
-    if (!nome || !cpf || !addSaldo) {
+    const { nome, cpf, saldo } = req.body;
+
+    if (!nome || !cpf || !saldo) {
       errorCode = 401;
-      throw new Error(
-        "Necessário informar nome, cpf e valor que deseja adicionar"
-      );
+      throw new Error("Nenhuma conta encontrada, insira novamente seus dados corretamente.");
     }
+    
     if (cpf.length !== 11) {
       errorCode = 422;
       throw new Error("CPF precisa ter 11 dígitos");
@@ -116,18 +114,18 @@ app.put("/clientes/saldo", (req: Request, res: Response) => {
       throw new Error("CPF precisa ser uma string");
     }
 
-    if (typeof addSaldo !== "number") {
+    if (typeof saldo !== "number") {
       errorCode = 422;
       throw new Error("Saldo precisa ser um número");
     }
-    const localizaCliente = clientes.filter((cliente) => {
-      if (cpf === cliente.cpf) {
-        let novoSaldo = cliente.saldo + addSaldo;
-        return (cliente.saldo = novoSaldo);
-      }
-    });
 
-    res.status(201).send(localizaCliente);
+    for (let cliente of clientes) {
+      if (cliente.cpf === cpf) {
+        cliente.saldo += saldo;
+        res.status(200).send(cliente);
+      }
+    }
+
   } catch (error: any) {
     res.status(errorCode).send(error.message);
   }

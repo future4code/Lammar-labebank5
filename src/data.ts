@@ -3,21 +3,21 @@ import * as tipo from "./type";
 export const clientes: tipo.Conta[] = [
   {
     nome: "João",
-    cpf: "123.456.789-00",
+    cpf: "12345678900",
     dataDeNascimento: "10/10/2000",
     saldo: 0,
     extrato: [],
   },
   {
     nome: "Pedro",
-    cpf: "123.456.789-01",
+    cpf: "12345678901",
     dataDeNascimento: "10/10/2000",
     saldo: 0,
     extrato: [],
   },
   {
     nome: "Paulo",
-    cpf: "123.456.789-02",
+    cpf: "12345678902",
     dataDeNascimento: "10/10/2000",
     saldo: 0,
     extrato: [],
