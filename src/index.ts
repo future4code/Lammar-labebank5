@@ -168,6 +168,57 @@ app.put("/clientes/saldo", (req: Request, res: Response) => {
 });
 
 
+//------------Pagar Conta----------------------------------
+
+app.post("/pagarconta", (req: Request, res: Response) => {
+  let errorCode: number = 400;
+  try {
+    const { data, descricao, valor, cpf } = req.body;
+
+    if (data.toString() === "Invalid Date") {
+      errorCode = 401;
+      throw new Error("Data para pagamento inválida");
+    }
+
+    const hoje = new Date();
+    const newData = new Date(data);
+
+    if (newData <= hoje){
+      errorCode = 422;
+      throw new Error("Data de pagamento já passou");
+    }
+
+    if (typeof descricao !== "string") {
+      errorCode = 422;
+      throw new Error("Descrição precisa ser uma string");
+    }
+    
+    if (typeof valor !== "number") {
+      errorCode = 422;
+      throw new Error("valor precisa ser um número");
+    }
+     
+    if (cpf.length !== 11) {
+      errorCode = 422;
+      throw new Error("CPF precisa ter 11 dígitos");
+    }
+
+    if (typeof cpf !== "string") {
+      errorCode = 422;
+      throw new Error("CPF precisa ser uma string");
+    }
+    for (let cliente of clientes) {
+      if (cliente.cpf === cpf) {
+        res.status(200).send(cliente);
+      }
+    }
+
+  } catch (error: any) {
+    res.status(errorCode).send(error.message);
+  }
+});
+
 app.listen(3003, () => {
   console.log("Servidor rodando na porta 3003");
 });
+
