@@ -92,6 +92,42 @@ app.post("/novocliente", (req: Request, res: Response) => {
   }
 });
 
+//------------Pegar saldo----------------------------------
+
+app.get("/saldo", (req: Request, res: Response) => {
+  let errorCode: number = 400;
+
+  try {
+    const { nome, cpf } = req.body;
+
+    if (!nome || !cpf ) {
+      errorCode = 401;
+      throw new Error("Nenhuma conta encontrada, insira novamente seus dados corretamente.");
+    }
+    
+    if (cpf.length !== 11) {
+      errorCode = 422;
+      throw new Error("CPF precisa ter 11 dígitos");
+    }
+
+    if (typeof cpf !== "string") {
+      errorCode = 422;
+      throw new Error("CPF precisa ser uma string");
+    }
+
+    for (let cliente of clientes) {
+      if (cliente.cpf === cpf) {
+        cliente.saldo;
+        res.status(200).send(cliente);
+      }
+  }
+
+  } catch (error: any) {
+  res.status(errorCode).send(error.message);
+  }
+
+});
+
 //------------Adicina saldo----------------------------------
 app.put("/clientes/saldo", (req: Request, res: Response) => {
   let errorCode: number = 400;
@@ -130,6 +166,7 @@ app.put("/clientes/saldo", (req: Request, res: Response) => {
     res.status(errorCode).send(error.message);
   }
 });
+
 
 app.listen(3003, () => {
   console.log("Servidor rodando na porta 3003");
